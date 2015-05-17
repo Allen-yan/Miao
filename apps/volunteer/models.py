@@ -258,17 +258,20 @@ class ActivityPublish(models.Model):
         )
 
     def __unicode__(self):
-        return self.activity_name
+        return "%s-%s:%s" % (self.effective_year, self.effective_season, self.activity_name)
 
 
 class ActivityDetail(models.Model):
+    # all activity details are created by group leaders
     activity = models.ForeignKey(ActivityPublish, verbose_name="活动主题")
     activity_time = models.DateTimeField(u"上课时间", null=True, blank=True)
     speaker = models.ForeignKey(Volunteer, verbose_name="主讲", related_name="speakser")
     assistant = models.ForeignKey(Volunteer, verbose_name="助理", related_name="assistant", null=True, blank=True)
     assistant_2_speaker = models.TextField(u"助理评主讲", null=True, blank=True)
-    speaker_self = models.TextField(u"主讲自评", null=True, blank=True)
+    # speaker_self = models.TextField(u"主讲自评", null=True, blank=True)
+    speaker_self = models.ManyToManyField(Evaluation, verbose_name=u"主讲自评", null=True, blank=True)
     meta = models.TextField(u"其它信息", null=True, blank=True)
+    status = models.IntegerField(u"状态", default=0, choices=COURSE_STATUS)
 
     class Meta:
         verbose_name = u"活动详情"
@@ -278,7 +281,7 @@ class ActivityDetail(models.Model):
         )
 
     def __unicode__(self):
-        return self.activity_name
+        return self.activity.activity_name
 
 class AskForLeave(models.Model):
     id = models.AutoField(u"id", primary_key=True)

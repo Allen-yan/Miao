@@ -300,6 +300,17 @@ admin.site.register(models.ActivityPublish, ActivityPublishAdmin)
 
 class ActivityDetailAdmin(CustomModelAdmin):
     list_display = ["activity", "activity_time", "speaker", "assistant"]
+    filter_horizontal = ("speaker_self", )
+    readonly_fields = ['status', 'assistant_2_speaker', 'meta']
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(ActivityDetailAdmin, self).get_form(request, obj=None, **kwargs)
+        form.base_fields["activity"].queryset = models.ActivityPublish.objects.filter(status=2)
+        # if obj:
+        #     form.base_fields["speaker"].queryset = obj.activity.confirmed_volunteers.all()
+        #     form.base_fields["assistant"].queryset = obj.activity.confirmed_volunteers.all()
+
+        return form
 admin.site.register(models.ActivityDetail, ActivityDetailAdmin)
 
 
@@ -313,9 +324,9 @@ class BookAdmin(CustomModelAdmin):
 admin.site.register(models.Book, BookAdmin)
 
 
-class EvaluationAdmin(CustomModelAdmin):
-    list_display = ["evaluation_value"]
-admin.site.register(models.Evaluation, EvaluationAdmin)
+# class EvaluationAdmin(CustomModelAdmin):
+#     list_display = ["evaluation_value"]
+# admin.site.register(models.Evaluation, EvaluationAdmin)
 
 
 class EvaluationRuleAdmin(CustomModelAdmin):
