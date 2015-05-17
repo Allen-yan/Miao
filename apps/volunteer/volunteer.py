@@ -79,7 +79,7 @@ def volunteer_apply(request, user_id):
 def volunteer_status(request, user_id):
     data = {}
     volunteer_info = Volunteer.objects.filter(user_id=user_id)
-    if volunteer_info is not []:
+    if volunteer_info:
         data[volunteer_info[0].status] = VOLUNTEER_STATUS_DICT.get(
             volunteer_info[0].status, volunteer_info[0].status)
 

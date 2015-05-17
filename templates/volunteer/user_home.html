@@ -26,7 +26,7 @@
         {#                </div>#}
         {#            </fieldset>#}
         {#        </form>#}
-        {% if volunteer_status < '31' %}
+        {% if volunteer_status and volunteer_status < '31' %}
             <a href="/volunteer/status/{{ user.id }}/">志愿者状态查询 </a>
         {% elif volunteer_status >= '31' %}
             <ul>
