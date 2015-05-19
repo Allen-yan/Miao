@@ -5,7 +5,13 @@ from django.contrib import admin
 from django.conf import settings
 admin.autodiscover()
 
-urlpatterns = patterns('apps.pub_page.views',
+urlpatterns = patterns('',
+    # Other patterns go here
+    # (r'^selectable/', include('selectable.urls')),
+    url(r'^test/$', 'apps.volunteer.views.test'),
+)
+
+urlpatterns += patterns('apps.pub_page.views',
     url(r'^$', 'index'),
     url(r'^intro/$', 'intro'),
     url(r'^news/$', 'news'),

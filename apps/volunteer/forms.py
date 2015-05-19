@@ -106,12 +106,12 @@ class UploadHomework(forms.Form):
 
 
 
-from selectable.forms import AutoCompleteWidget
-
-from .lookups import ActivityLookup
-class testForm(forms.Form):
-    test_field = forms.CharField(
-        label='Type the name of a fruit (AutoCompleteWidget)',
-        widget=AutoCompleteWidget(ActivityLookup),
-        required=False,
-    )
+# from selectable.forms import AutoCompleteWidget
+#
+# from .lookups import ActivityLookup
+# class testForm(forms.Form):
+#     test_field = forms.CharField(
+#         label='Type the name of a fruit (AutoCompleteWidget)',
+#         widget=AutoCompleteWidget(ActivityLookup),
+#         required=False,
+#     )

@@ -188,22 +188,7 @@ class VolunteersAdmin(CustomModelAdmin):
             obj_old = self.model.objects.get(pk=obj.pk)
             modify_user = User.objects.get(id=obj.user_id)
             if obj_old.level != obj.level:
-                if obj.level in ['03', '02']:   # operator/ group leader
-                    modify_user.is_staff = True    # weather this user can access the admin site
-                    modify_user.groups.clear()
-                    # add user to operator's/ group leader's group
-                    if obj.level == '03':
-                        new_group = Group.objects.get(name=u"运营")
-                    else:
-                        new_group = Group.objects.get(name=u"组长")
-
-                    modify_user.groups.add(new_group)
-                elif obj.level == '04':  # admin
-                    modify_user.is_staff = True    # weather this user can access the admin site
-                    modify_user.is_superuser = True
-                else:   # 01 normal vol
-                    modify_user.is_staff = True    # weather this user can access the admin site
-                    modify_user.groups.clear()
+                db_utils.update_vol_type(obj, obj.level)
             if obj_old.eva_result != obj.eva_result:
                 if obj.eva_result == '0':
                     modify_user.status = '20'
@@ -221,8 +206,8 @@ admin.site.register(models.Volunteer, VolunteersAdmin)
 
 class VolunteerGroupAdmin(CustomModelAdmin):
     filter_horizontal = ('volunteers',)
-    def queryset(self, request):
-        qs = super(CustomModelAdmin, self).queryset(request).filter(status='1')
+    def get_queryset(self, request):
+        qs = super(CustomModelAdmin, self).get_queryset(request).filter(status='1')
         if not request.user.is_superuser:
             vol_info = models.Volunteer.objects.get(user_id=request.user.id)
             if vol_info.level == '01':   # normal volunteer
@@ -233,6 +218,11 @@ class VolunteerGroupAdmin(CustomModelAdmin):
                 qs = qs.filter(school_for_work__in=db_utils.get_operators_schools(vol_info.id))
 
         return qs
+
+    def save_model(self, request, obj, form, change):
+        group_leader = obj.group_leader
+        db_utils.update_vol_type(group_leader, '02')
+        super(VolunteerGroupAdmin, self).save_model(request, obj, form, change)
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(VolunteerGroupAdmin, self).get_form(request, obj=None, **kwargs)
@@ -266,14 +256,14 @@ admin.site.register(models.School, SchoolAdmin)
 
 class ActivityPublishAdmin(CustomModelAdmin):
 
-    # def get_form(self, request, obj=None, **kwargs):
-    #     form = super(ActivityPublishAdmin, self).get_form(request, obj=None, **kwargs)
-    #     # 仅有申请第一/第二志愿的志愿者才能被选中
-    #     if obj:
-    #         form.base_fields["confirm_volunteers"].queryset = \
-    #             (obj.apply_volunteers.all() | obj.apply_volunteers2.all()).distinct()
-    #
-    #     return form
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(ActivityPublishAdmin, self).get_form(request, obj=None, **kwargs)
+        # 仅有申请第一/第二志愿的志愿者才能被选中
+        if obj:
+            form.base_fields["confirm_volunteers"].queryset = \
+                (obj.apply_volunteers.all() | obj.apply_volunteers2.all()).distinct()
+
+        return form
     def response_change(self, request, obj):
         if "_continue" in request.POST:
             # when user click the '_continue' button which is confirm button in this model
@@ -282,8 +272,7 @@ class ActivityPublishAdmin(CustomModelAdmin):
                 obj.save()
 
                 # 将所选组长志愿者 的类型变更
-                obj.group_leader.level = '02'
-                obj.group_leader.save()
+                db_utils.update_vol_type(obj.group_leader, '02')
 
         return super(ActivityPublishAdmin, self).response_change(request, obj)
 
@@ -305,10 +294,29 @@ class ActivityDetailAdmin(CustomModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(ActivityDetailAdmin, self).get_form(request, obj=None, **kwargs)
-        form.base_fields["activity"].queryset = models.ActivityPublish.objects.filter(status=2)
-        # if obj:
-        #     form.base_fields["speaker"].queryset = obj.activity.confirmed_volunteers.all()
-        #     form.base_fields["assistant"].queryset = obj.activity.confirmed_volunteers.all()
+
+
+        if obj:
+            form.base_fields["speaker"].queryset = obj.activity.confirm_volunteers.all()
+            form.base_fields["assistant"].queryset = obj.activity.confirm_volunteers.all()
+        else:
+            form.base_fields["speaker"].queryset = form.base_fields["assistant"].queryset = models.Volunteer.objects.\
+                filter(volunteer_type='01',status_gte='31')
+        # todo next activity flow
+        if not request.user.is_superuser:
+            vol_info = models.Volunteer.objects.get(user_id=request.user.id)
+            if vol_info.level == '01':   # normal volunteer
+                form = None
+            elif vol_info.level == '02':   # group leader
+                form.base_fields["activity"].queryset = models.ActivityPublish.objects.filter(
+                    status=2,
+                    group_leader=vol_info)
+            elif vol_info.level == '03':  # operator
+                form.base_fields["activity"].queryset = models.ActivityPublish.objects.filter(
+                    status=2,
+                    group_leader=vol_info)
+            else:
+                form.base_fields["activity"].queryset = models.ActivityPublish.objects.all()
 
         return form
 admin.site.register(models.ActivityDetail, ActivityDetailAdmin)

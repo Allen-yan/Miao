@@ -1,5 +1,6 @@
 #-*- coding: UTF-8 -*-
 import models
+from django.contrib.auth.models import User, Group
 
 def get_operators_schools(volunteer_id):
     regions = models.OperatorRegion.objects.filter(operator=volunteer_id)
@@ -41,3 +42,31 @@ def get_vol_schools(vol_obj):
     for group in groups:
         result[group.school_for_work.id] = ""
     return result.keys()
+
+
+def update_vol_type(vol_obj, new_type):
+    obj_user = vol_obj.user   # auth user
+    vol_obj.level = new_type
+    obj_user.groups.clear()
+    if new_type == '04':   # admin
+        obj_user.is_staff = True
+        obj_user.is_superuser = True
+        operator_group = Group.objects.get(name=u"系统管理员")
+        obj_user.groups.add(operator_group)
+    elif new_type == '02':   # group leader
+        obj_user.is_staff = True
+        obj_user.is_superuser = False
+        operator_group = Group.objects.get(name=u"组长")
+        obj_user.groups.add(operator_group)
+    elif new_type == '03':  # operator
+        obj_user.is_staff = True
+        obj_user.is_superuser = False
+        operator_group = Group.objects.get(name=u"运营")
+        obj_user.groups.add(operator_group)
+    else:    # normal vol
+        obj_user.is_staff = False
+        obj_user.is_superuser = False
+
+    obj_user.save()
+    vol_obj.save()
+
