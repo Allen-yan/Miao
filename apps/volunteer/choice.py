@@ -40,12 +40,19 @@ EVALUATION_OBJECT = (
     (0, u"活动主讲"),
 )
 
-COURSE_STATUS = (
+ACTIVITY_STATUS = (
     (0, u"未开始"),
     (1, u"已发布"),
     (2, u"已实施"),
     (3, u"结束"),
 )
+
+ACTIVITY_DETAIL_STATUS = (
+    (0, u"未开始"),
+    (1, u"已开始"),
+    (2, u"结束"),
+)
+
 
 ACTIVITY_TYPE = (
     (0, u"阅读"),

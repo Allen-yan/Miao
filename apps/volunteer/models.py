@@ -227,7 +227,7 @@ class ActivityPublish(models.Model):
     course = models.ForeignKey(Course, verbose_name="课程")
     class_id = models.ForeignKey(Class, verbose_name="班级")
     activity_type = models.IntegerField(u"活动形式", default=0, choices=ACTIVITY_TYPE)
-    status = models.IntegerField(u"状态", default=0, choices=COURSE_STATUS)
+    status = models.IntegerField(u"状态", default=0, choices=ACTIVITY_STATUS)
     apply_volunteers = models.ManyToManyField(
         Volunteer, verbose_name=u"第一志愿", related_name="vol1", null=True, blank=True)
     apply_volunteers2 = models.ManyToManyField(
@@ -256,7 +256,7 @@ class ActivityDetail(models.Model):
     # speaker_self = models.TextField(u"主讲自评", null=True, blank=True)
     # speaker_self = models.ManyToManyField(ActivityEvaluation, verbose_name=u"主讲自评", null=True, blank=True)
     meta = models.TextField(u"其它信息", null=True, blank=True)
-    status = models.IntegerField(u"状态", default=0, choices=COURSE_STATUS)
+    status = models.IntegerField(u"状态", default=0, choices=ACTIVITY_DETAIL_STATUS)
 
     class Meta:
         verbose_name = u"活动详情"

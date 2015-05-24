@@ -33,7 +33,7 @@ urlpatterns += patterns('apps.volunteer.views',
 
 urlpatterns += patterns('apps.volunteer.volunteer',
     url(r'^volunteer/apply/(?P<user_id>.*)/$', 'volunteer_apply'),
-    url(r'^volunteer/history/(?P<user_id>.*)/$', 'volunteer_history'),
+    url(r'^volunteer/history/$', 'volunteer_history'),
     url(r'^volunteer/home/(?P<user_id>.*)/$', 'user_home'),
     url(r'^volunteer/status/(?P<user_id>.*)/$', 'volunteer_status'),
     url(r'^volunteer/ask_for_leave/(?P<user_id>.*)/$', 'ask_for_leave'),

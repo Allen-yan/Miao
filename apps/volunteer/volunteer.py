@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 from forms import VolunteerForm, UploadHomework
-from models import Volunteer, VOLUNTEER_STATUS
+from models import Volunteer, VOLUNTEER_STATUS, ActivityDetail
 from settings import LOGIN_URL, MEDIA_ROOT
 import utils
 
@@ -18,8 +18,9 @@ VOLUNTEER_STATUS_DICT = utils.model_choice_2_dict(VOLUNTEER_STATUS)
 @login_required(login_url=LOGIN_URL)
 def user_home(request, user_id):
     data = {}
+    user_id = request.user.id
     try:
-        user = User.objects.get(id=user_id)
+        user = User.objects.get(id=request.user.id)
     except User.DoesNotExist:
         data["message"] = "用户不存在"
         data["back_url"] = request.META["HTTP_REFERENCE"]
@@ -88,9 +89,43 @@ def volunteer_status(request, user_id):
 
 @csrf_protect
 @login_required(login_url=LOGIN_URL)
-def volunteer_history(request, user_id):
+def volunteer_history(request):
     data = {}
-    return render_to_response("volunteer/index.html", data, context_instance=RequestContext(request))
+    try:
+        user = User.objects.get(id=request.user.id)
+    except User.DoesNotExist:
+        data["message"] = "用户不存在"
+        data["back_url"] = request.META["HTTP_REFERENCE"]
+        return HttpResponseRedirect(utils.make_GET_url("/error/", data))
+
+    volunteer_info = Volunteer.objects.get(user_id=user.id)
+    activity_as_speaker = ActivityDetail.objects.filter(
+        speaker=volunteer_info.id
+    )
+    activity_as_assistant = ActivityDetail.objects.filter(
+        assistant=volunteer_info.id
+    )
+
+    output = []
+    for a in activity_as_speaker:
+        output.append({
+            'role': 'speaker',
+            'activity': a.activity,
+            'data': a.activity_time.strftime("%Y-%m-%D"),
+            'assistant': a.assistant,
+            'status': a.status
+        })
+
+    for a in activity_as_assistant:
+        output.append({
+            'role': 'assistant',
+            'activity': a.activity,
+            'data': a.activity_time.strftime("%Y-%m-%D"),
+            'speaker': a.speaker,
+            'status': a.status
+        })
+    data["activity_history"] = output
+    return render_to_response("volunteer/history.html", data, context_instance=RequestContext(request))
 
 
 @csrf_protect
