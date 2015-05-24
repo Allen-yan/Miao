@@ -216,21 +216,6 @@ class EvaluationRule(BaseModelMixin):
         return self.item
 
 
-class Evaluation(BaseModelMixin):
-    evaluation_rule = models.ForeignKey(EvaluationRule, verbose_name="评价规则")
-    evaluation_value = models.IntegerField(u"评价", default="2", choices=EVALUATION)
-
-    class Meta:
-        verbose_name = u"评价"
-        verbose_name_plural = u"评价"
-        permissions = (
-            ("view_only_evaluation",  u"可以查看%s相关信息" % verbose_name),
-        )
-
-    def __unicode__(self):
-        return "%s: %s" % (self.evaluation_rule.item, self.evaluation_value)
-
-
 class ActivityPublish(models.Model):
     activity_name = models.CharField(u"名称", max_length=100)
     effective_year = models.CharField(u"活动时间-年", max_length=4, choices=YEARS)
@@ -269,7 +254,7 @@ class ActivityDetail(models.Model):
     assistant = models.ForeignKey(Volunteer, verbose_name="助理", related_name="assistant", null=True, blank=True)
     assistant_2_speaker = models.TextField(u"助理评主讲", null=True, blank=True)
     # speaker_self = models.TextField(u"主讲自评", null=True, blank=True)
-    speaker_self = models.ManyToManyField(Evaluation, verbose_name=u"主讲自评", null=True, blank=True)
+    # speaker_self = models.ManyToManyField(ActivityEvaluation, verbose_name=u"主讲自评", null=True, blank=True)
     meta = models.TextField(u"其它信息", null=True, blank=True)
     status = models.IntegerField(u"状态", default=0, choices=COURSE_STATUS)
 
@@ -282,6 +267,24 @@ class ActivityDetail(models.Model):
 
     def __unicode__(self):
         return self.activity.activity_name
+
+
+class ActivityEvaluation(models.Model):
+    activity = models.ForeignKey(ActivityDetail, verbose_name=u'关联已发布活动')
+    evaluation = models.ForeignKey(EvaluationRule, verbose_name=u'评价规则')
+    evaluation_obj = models.IntegerField(u"评价对象", choices=EVALUATION_OBJECT, default=0)
+    value = models.IntegerField(u"评价", choices=EVALUATION)
+
+    class Meta:
+        verbose_name = u"主讲自评"
+        verbose_name_plural = u"主讲自评"
+        permissions = (
+            ("view_only_activity_evaluation",  u"可以查看%s相关信息" % verbose_name),
+        )
+
+    def __unicode__(self):
+        return ""
+
 
 class AskForLeave(models.Model):
     id = models.AutoField(u"id", primary_key=True)

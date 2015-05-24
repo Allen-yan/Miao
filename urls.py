@@ -8,7 +8,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Other patterns go here
     # (r'^selectable/', include('selectable.urls')),
-    url(r'^test/$', 'apps.volunteer.views.test'),
+    # url(r'^test/$', 'apps.volunteer.views.test'),
 )
 
 urlpatterns += patterns('apps.pub_page.views',

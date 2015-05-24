@@ -104,14 +104,3 @@ class UploadHomework(forms.Form):
     homework_name = forms.CharField(label=u"作业名称", required=True)
     upload_file = forms.FileField(label=u"作业名称", required=True, max_length=100)
 
-
-
-# from selectable.forms import AutoCompleteWidget
-#
-# from .lookups import ActivityLookup
-# class testForm(forms.Form):
-#     test_field = forms.CharField(
-#         label='Type the name of a fruit (AutoCompleteWidget)',
-#         widget=AutoCompleteWidget(ActivityLookup),
-#         required=False,
-#     )

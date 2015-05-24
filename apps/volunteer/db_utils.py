@@ -66,7 +66,7 @@ def update_vol_type(vol_obj, new_type):
     else:    # normal vol
         obj_user.is_staff = False
         obj_user.is_superuser = False
-
+    vol_obj.status = '31'   # active volunteer
     obj_user.save()
     vol_obj.save()
 

@@ -36,6 +36,10 @@ EVALUATION = (
     (4, u"非常不同意")
 )
 
+EVALUATION_OBJECT = (
+    (0, u"活动主讲"),
+)
+
 COURSE_STATUS = (
     (0, u"未开始"),
     (1, u"已发布"),

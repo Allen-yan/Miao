@@ -4,13 +4,6 @@
 {% load custom_permissions %}
 {% load admin_urls %}
 
-{% block extrahead %}
-<link rel="stylesheet" href="/static/css/jquery-ui.min.css" type="text/css" />
-<script type="text/javascript" src="/static/js/jquery.min.js"></script>
-<script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>
- {{ form.media.css }}
- {{ form.media.js }}
-{% endblock %}
 
 {% block object-tools-items %}
     {% if has_view_only_perm %}

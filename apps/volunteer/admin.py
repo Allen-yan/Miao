@@ -13,6 +13,10 @@ from apps.volunteer import models, choice
 import db_utils
 
 
+from django.contrib.admin.sites import AdminSite
+AdminSite.site_header = '苗苗阅读管理系统'
+AdminSite.site_title = '苗苗阅读管理系统'
+
 # ==================================================================
 # =======================auth admin=================================
 class SelfUserAdmin(UserAdmin):
@@ -287,22 +291,27 @@ class ActivityPublishAdmin(CustomModelAdmin):
 admin.site.register(models.ActivityPublish, ActivityPublishAdmin)
 
 
+class EvaluationInlineAdmin(admin.TabularInline):
+    model = models.ActivityEvaluation
+    fk_name = 'activity'
+    exclude = ['evaluation_obj']
+
+
 class ActivityDetailAdmin(CustomModelAdmin):
     list_display = ["activity", "activity_time", "speaker", "assistant"]
-    filter_horizontal = ("speaker_self", )
-    readonly_fields = ['status', 'assistant_2_speaker', 'meta']
+    # readonly_fields = ['status', 'assistant_2_speaker', 'meta']
+    exclude = ['speaker_self']
+    inlines = [EvaluationInlineAdmin,]
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(ActivityDetailAdmin, self).get_form(request, obj=None, **kwargs)
-
 
         if obj:
             form.base_fields["speaker"].queryset = obj.activity.confirm_volunteers.all()
             form.base_fields["assistant"].queryset = obj.activity.confirm_volunteers.all()
         else:
             form.base_fields["speaker"].queryset = form.base_fields["assistant"].queryset = models.Volunteer.objects.\
-                filter(volunteer_type='01',status_gte='31')
-        # todo next activity flow
+                filter(volunteer_type='01',status__gte='31')
         if not request.user.is_superuser:
             vol_info = models.Volunteer.objects.get(user_id=request.user.id)
             if vol_info.level == '01':   # normal volunteer
@@ -319,6 +328,17 @@ class ActivityDetailAdmin(CustomModelAdmin):
                 form.base_fields["activity"].queryset = models.ActivityPublish.objects.all()
 
         return form
+
+    def save_formset(self, request, form, formset, change):
+        #http://docs.djangoproject.com/en/dev/ref/contrib/admin/#django.contrib.admin.ModelAdmin.save_formset
+        #Experimenting showed this is called once per formset (where the formset is a group of inlines)
+
+        instances = formset.save(commit=False)
+        for activity_eva in instances:
+            activity_eva.evaluation_obj = 0  # activity speaker's self evaluation
+            # activity_eva.save()
+        formset.save_m2m()
+        super(ActivityDetailAdmin, self).save_formset(request, form, formset, change)
 admin.site.register(models.ActivityDetail, ActivityDetailAdmin)
 
 

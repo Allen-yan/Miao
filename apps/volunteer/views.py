@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 
-from forms import VolunteerForm, CreationUserForm, testForm
+from forms import VolunteerForm, CreationUserForm
 from models import Volunteer, VOLUNTEER_STATUS
 from settings import LOGIN_URL
 import utils
@@ -116,9 +116,3 @@ def logout(request):
     logout(request)
 
     return HttpResponseRedirect("/")
-
-
-def test(request):
-    form = testForm()
-
-    return render_to_response("test.html", {"form":form})
