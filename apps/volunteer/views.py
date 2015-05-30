@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 
-from forms import VolunteerForm, CreationUserForm, testForm
+#from forms import VolunteerForm, CreationUserForm, testForm
 from models import Volunteer, VOLUNTEER_STATUS
 from settings import LOGIN_URL
 import utils
