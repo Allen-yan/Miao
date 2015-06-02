@@ -31,8 +31,12 @@ body{
 	text-align:center;
 	color:#999;
 	font-size:small;
+	left: 50%;
 }
 
+#foot p{
+	/*margin-left: -161px;*/
+}
 /* common */
 a{
 	text-decoration: none;
@@ -53,7 +57,14 @@ a{
 }
 #user-tools a{
 	color:#8a5;
+	border: 1px #c3c0b0 solid;
+	padding:8px 10px 8px 10px;
+	border-radius: 5px;
 }
 
+#user-tools a:hover{
+	background-color: #c3c0b0;
+	color: #fff;
+}
 
 

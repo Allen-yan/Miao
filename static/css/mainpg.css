@@ -52,19 +52,33 @@ body{
 	margin-top:10px;
 	margin-bottom:10px;
 	height:360px;
-	background-color:;
+	border: 2px #9c3 outset;
+	padding: 5px 5px;
+	border-radius: 5px;
+
 }
+
+#news_win img{
+	display: block;
+	width: 100%;
+	height:360px;
+}
+
+.owl-page span{
+	background: #9c3;
+}
+
 #news_lst{
 	float:left;
 	width:100%;
 	background-image:url(/static/imgs/sbg.png);
 	background-repeat:repeat;
+	margin-bottom: 30px;
 }
 .clear{
 	clear:both;
 }
 #foot{
-	text-align:center;
 	color:#999;
 	font-size:small;
 }
@@ -102,7 +116,7 @@ a{
 	width:340px;
 	height:50px;
 	background-color:#9c3;
-	sborder-left: 20px solid #efc;
+	border-left: 20px solid #efc;
 	border-bottom: 1px solid #efc;
 	border-top: 1px solid #efc;
 	text-align:center;
@@ -156,16 +170,28 @@ a{
 
 /* components in news_lst */
 #news_lst div ul{
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
 }
 #news_lst div ul li{
+	padding-left: 12px;
+	border-bottom: 1px #800 dashed;
 	height:30px;
+	line-height: 30px;
 }
+
+#news_lst div ul li:hover{
+	background-color: #c3c0b0;	
+	color: #800;
+}
+
 .news_lst{
 	width:48%;
 	float:left;
 	margin:1%;
 }
-.news_lst a{
+.news_lst .more{
 	float:right;
 	margin-top:-10px;
 	color:#955;

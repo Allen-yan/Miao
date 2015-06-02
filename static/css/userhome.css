@@ -1,0 +1,36 @@
+.welcome{
+	position: fixed;
+	color: #8a5;
+	font-size: 50px;
+	font-weight: 900;
+	text-shadow:6px 6px 4px #c3c0b0;
+	top: 0px;
+	left: 40%;
+
+}
+
+.navigation{
+	list-style-type: none;
+	width: 260px;
+	margin-top: 60px;
+	
+}
+
+.navLi a{
+	display: block;
+	text-decoration: none;
+	color: #000;
+	font-weight: 600;
+	background-color: #fff;
+	opacity: 0.8;
+	margin-bottom: 20px;
+	text-align: center;
+	padding: 8px 20px 8px 20px;
+	border: 1px #c3c0b0 solid;
+	border-radius: 25px;
+}
+
+.navLi a:hover{
+	background-color: #c3c0b0;
+	color: #fff;
+}
