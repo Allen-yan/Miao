@@ -16,6 +16,7 @@ urlpatterns += patterns('apps.pub_page.views',
     url(r'^intro/$', 'intro'),
     url(r'^news/$', 'news'),
     url(r'^articles/$', 'articles'),
+    url(r'^article/(?P<article_id>\d{1,})$', 'article_detail'),
     url(r'^feelings/$', 'feelings'),
     url(r'^train_classes/$', 'train_classes'),
 )

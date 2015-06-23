@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render
+import json
 
-# Create your views here.
+from django.shortcuts import render, render_to_response, get_object_or_404
+
+import models
+
+
 def index(request):
     return render(request, 'pub_page/index.html')
 
@@ -11,6 +15,19 @@ def news(request):
     return render(request, 'pub_page/news.html')
 def articles(request):
     return render(request, 'pub_page/articles.html')
+
+
+def article_detail(request, article_id):
+    article = get_object_or_404(models.Article, id=article_id)
+
+    if not article:
+        raise
+    data = {
+        "article": vars(article)
+    }
+
+
+    return render_to_response("pub_page/article_detail.html", data)
 
 def feelings(request):
     return render(request, 'pub_page/feelings.html')

@@ -1,0 +1,15 @@
+{% extends "volunteer/base.html" %}
+
+{% block title %}活动列表{% endblock %}
+
+{% block link %}{% endblock %}
+
+{% block body %}
+
+    <h1>{{ article.title }}</h1>
+    <h2>{{ article.summery }}---{{ article.publish_time }}</h2>
+    <span>{{ article.author }}</span>
+    <div>{{ article.content }}</div>
+
+
+{% endblock %}
