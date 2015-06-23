@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 
-from models import Volunteer, ActivityPublish
+from models import Volunteer, ActivityPublish, ActivityEvaluation
 from utils import _
 
 
@@ -98,6 +98,19 @@ class ActivityPublicForm(ModelForm):
     class Meta:
         model = ActivityPublish
         exclude = ('updated_at', 'apply_volunteers', 'apply_volunteers2', 'confirm_volunteers')
+
+
+class ActivityEvaluationForm(ModelForm):
+    evaluation_obj = forms.CharField(widget=forms.HiddenInput, required=True)
+    activity = forms.CharField(widget=forms.HiddenInput, required=True)
+
+    def __init__(self, *args, **kwargs):
+        super(ActivityEvaluationForm, self).__init__(*args, **kwargs)
+        self.fields["evaluation_obj"].initial_value = 0
+
+    class Meta:
+        model = ActivityEvaluation
+        exclude = ('evaluation_obj', )
 
 
 class UploadHomework(forms.Form):

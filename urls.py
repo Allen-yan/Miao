@@ -38,6 +38,8 @@ urlpatterns += patterns('apps.volunteer.volunteer',
     url(r'^volunteer/status/(?P<user_id>.*)/$', 'volunteer_status'),
     url(r'^volunteer/ask_for_leave/(?P<user_id>.*)/$', 'ask_for_leave'),
     url(r'^volunteer/homework/(?P<user_id>.*)/$', 'volunteer_homework'),
+    url(r'^volunteer/self_evaluation/(?P<activity_id>.*)/$', 'self_evaluation'),
+    url(r'^volunteer/assistant_evaluation/(?P<activity_id>.*)/$', 'assistant_evaluation'),
 )
 
 from django.conf.urls.static import static

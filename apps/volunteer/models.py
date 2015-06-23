@@ -249,12 +249,11 @@ class ActivityPublish(models.Model):
 class ActivityDetail(models.Model):
     # all activity details are created by group leaders
     activity = models.ForeignKey(ActivityPublish, verbose_name="活动主题")
-    activity_time = models.DateTimeField(u"上课时间", null=True, blank=True)
+    activity_time = models.DateTimeField(u"上课时间")
     speaker = models.ForeignKey(Volunteer, verbose_name="主讲", related_name="speakser")
     assistant = models.ForeignKey(Volunteer, verbose_name="助理", related_name="assistant", null=True, blank=True)
-    assistant_2_speaker = models.TextField(u"助理评主讲", null=True, blank=True)
-    # speaker_self = models.TextField(u"主讲自评", null=True, blank=True)
     # speaker_self = models.ManyToManyField(ActivityEvaluation, verbose_name=u"主讲自评", null=True, blank=True)
+    # assistent_2_speaker = models.ManyToManyField(ActivityEvaluation, verbose_name=u"助理评价", null=True, blank=True)
     meta = models.TextField(u"其它信息", null=True, blank=True)
     status = models.IntegerField(u"状态", default=0, choices=ACTIVITY_DETAIL_STATUS)
 
@@ -276,8 +275,8 @@ class ActivityEvaluation(models.Model):
     value = models.IntegerField(u"评价", choices=EVALUATION)
 
     class Meta:
-        verbose_name = u"主讲自评"
-        verbose_name_plural = u"主讲自评"
+        verbose_name = u"评价"
+        verbose_name_plural = u"评价"
         permissions = (
             ("view_only_activity_evaluation",  u"可以查看%s相关信息" % verbose_name),
         )

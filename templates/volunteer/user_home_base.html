@@ -1,0 +1,46 @@
+{% extends "volunteer/base.html" %}
+
+{% block link %}
+<link rel="stylesheet" type="text/css" href="/static/css/userhome.css">
+{% endblock %}
+
+{% block body %}
+    <span class="welcome">{{ username }}苗苗欢迎您的加入</span>
+    <ul class="navigation">
+        {% if volunteer_status and volunteer_status < '31' %}
+            <li class="navLi">
+                <a href="/volunteer/status/{{ user.id }}/">志愿者状态查询 </a>
+            </li>
+        {% elif volunteer_status >= '31' %}
+            <li class="navLi">
+                <a href="/volunteer/apply/{{ user.id }}/">志愿者信息修改</a>
+            </li>
+            <li class="navLi">
+                <a href="/volunteer/history/">个人历史活动回顾 </a>
+            </li>
+            <li class="navLi">
+                <a href="/activity/list/">查看活动 </a>
+            </li>
+{#                <li class="navLi">#}
+{#                    <a href="/volunteer/homework/{{ user.id }}/">我的作业 </a>#}
+{#                </li>#}
+        {% else %}
+            <li class="navLi">
+                <a href="/volunteer/apply/{{ user.id }}/">志愿者申请 </a>
+            </li>
+        {% endif %}
+    </ul>
+
+    <div id="content-main">
+        {% if message %}
+            <ul class="messagelist">
+                <li class="success">用户 "{{ username }}" 注册成功。</li>
+            </ul>
+        {% endif %}
+        <div id="center">
+            {% block center %}
+            {% endblock %}
+        </div>
+    </div>
+
+{% endblock %}

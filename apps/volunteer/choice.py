@@ -38,6 +38,7 @@ EVALUATION = (
 
 EVALUATION_OBJECT = (
     (0, u"活动主讲"),
+    (1, u"助理评价"),
 )
 
 ACTIVITY_STATUS = (

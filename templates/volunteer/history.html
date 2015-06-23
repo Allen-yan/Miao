@@ -1,43 +1,44 @@
-{% extends "volunteer/base.html" %}
+{% extends "volunteer/user_home_base.html" %}
 
-{% block link %}{% endblock %}
+{% block center %}
+    <table>
+        <thead>
+        <tr>
+            <th>活动内容</th>
+            <th>时间</th>
+            <th>角色</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody style="border: 1px solid black">
+        {% for act_info in activity_history %}
+            {% if act_info.role == 'speaker' %}
+                <tr style="border: 1px solid black">
+                    <td style="border: 1px solid black">{{ act_info.activity }}</td>
+                    <td style="border: 1px solid black">{{ act_info.date }}</td>
+                    <td style="border: 1px solid black">我是: 主讲</td>
 
-{% block body %}
-    <div id="content-main">
-        {% if message %}
-            <ul class="messagelist">
-                <li class="success">{{ message }}</li>
-            </ul>
-        {% endif %}
-        <table>
-            <thead>
-                <tr>
-                    <th>活动内容</th><th>时间</th><th>角色</th><th>操作</th>
-                </tr>
-            </thead>
-            <tbody style="border: 1px solid black">
-                {% for act_info in activity_history %}
-                    {% if act_info.role == 'speaker' %}
-                        <tr style="border: 1px solid black">
-                            <td  style="border: 1px solid black">{{ act_info.activity }}</td>
-                            <td  style="border: 1px solid black">{{ act_info.data }}</td>
-                            <td  style="border: 1px solid black">我是: 主讲</td>
-                            <td  style="border: 1px solid black"><a href="/">自评</a></td>
-                            {% if act_info.status < 2 %}  // un-finished
-                                <td  style="border: 1px solid black"><a href="/volunteer/ask_for_leave/">请假</a></td>
-                            {% endif %}
-                        </tr>
-                    {% else %}
-                        <tr  style="border: 1px solid black">
-                            <td style="border: 1px solid black">{{ act_info.activity }}</td>
-                            <td style="border: 1px solid black">{{ act_info.data }}</td>
-                            <td style="border: 1px solid black">我是: 助教</td>
-                            <td style="border: 1px solid black"><a href="/">评价主讲</a></td>
-                        </tr>
+                    <!-- 若活动已结束 则无法评价 -->
+                    <td style="border: 1px solid black">
+                        <a href="/volunteer/self_evaluation/{{ act_info.id }}/">自评</a>
+                    </td>
+                    {% if act_info.status < 2 %}
+                        <td style="border: 1px solid black"><a href="/volunteer/ask_for_leave/">请假</a></td>
                     {% endif %}
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
+                </tr>
+            {% else %}
+                <tr style="border: 1px solid black">
+                    <td style="border: 1px solid black">{{ act_info.activity }}</td>
+                    <td style="border: 1px solid black">{{ act_info.date }}</td>
+                    <td style="border: 1px solid black">我是: 助教</td>
+                    <td style="border: 1px solid black"><a href="/volunteer/assistant_evaluation/{{ act_info.id }}/">评价主讲</a>
+                    </td>
+                    {% if act_info.status < 2 %}
+                        <td style="border: 1px solid black"><a href="/volunteer/ask_for_leave/">请假</a></td>
+                    {% endif %}
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

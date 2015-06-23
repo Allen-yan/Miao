@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
+import json
+
 from django.shortcuts import render, render_to_response
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.db.models.query import QuerySet
 
-from forms import VolunteerForm, UploadHomework
-from models import Volunteer, VOLUNTEER_STATUS, ActivityDetail
+from forms import VolunteerForm, UploadHomework, ActivityEvaluationForm
+from models import Volunteer, VOLUNTEER_STATUS, ActivityDetail, EvaluationRule, ActivityEvaluation
 from settings import LOGIN_URL, MEDIA_ROOT
 import utils
 
@@ -99,6 +102,8 @@ def volunteer_history(request):
         return HttpResponseRedirect(utils.make_GET_url("/error/", data))
 
     volunteer_info = Volunteer.objects.get(user_id=user.id)
+    if volunteer_info :
+        data["volunteer_status"] = volunteer_info.status
     activity_as_speaker = ActivityDetail.objects.filter(
         speaker=volunteer_info.id
     )
@@ -109,23 +114,85 @@ def volunteer_history(request):
     output = []
     for a in activity_as_speaker:
         output.append({
+            'id': a.id,
             'role': 'speaker',
             'activity': a.activity,
-            'data': a.activity_time.strftime("%Y-%m-%D"),
+            'date': a.activity_time.strftime("%Y-%m-%d"),
             'assistant': a.assistant,
             'status': a.status
         })
 
     for a in activity_as_assistant:
         output.append({
+            'id': a.id,
             'role': 'assistant',
             'activity': a.activity,
-            'data': a.activity_time.strftime("%Y-%m-%D"),
+            'date': a.activity_time.strftime("%Y-%m-%d") if a.activity_time else "",
             'speaker': a.speaker,
             'status': a.status
         })
     data["activity_history"] = output
     return render_to_response("volunteer/history.html", data, context_instance=RequestContext(request))
+
+
+@csrf_protect
+@login_required(login_url=LOGIN_URL)
+def self_evaluation(request, activity_id):
+    data = {}
+    return HttpResponseRedirect('/volunteer/history/')
+
+
+@csrf_protect
+@login_required(login_url=LOGIN_URL)
+def assistant_evaluation(request, activity_id):
+    data = {}
+
+    try:
+        user = User.objects.get(id=request.user.id)
+        vol = Volunteer.objects.get(user=user.id)
+        if vol :
+            data["volunteer_status"] = vol.status
+    except User.DoesNotExist:
+        data["message"] = "用户不存在"
+        data["back_url"] = request.META["HTTP_REFERENCE"]
+
+        return HttpResponseRedirect(utils.make_GET_url(data["back_url"], data))
+
+    act = ActivityDetail.objects.filter(id=activity_id, assistant=vol.id)
+    if not act:
+        data["message"] = "没有该活动"
+
+        return HttpResponseRedirect(utils.make_GET_url(data["back_url"], data))
+
+    if request.method == 'GET':
+        data['activity'] = act[0]
+        evaluation_rules = EvaluationRule.objects.filter(evaluation_type=0)  # 课程相关评价规则
+        data['evaluation_rules'] = [s for s in evaluation_rules]
+        data['form'] = ActivityEvaluationForm()
+
+        return render_to_response("volunteer/assistant_evaluation.html", data, context_instance=RequestContext(request))
+
+    elif request.method == 'POST':
+        act_detail_obj = ActivityDetail.objects.filter(id=request.POST.get('activity_detail_id', ''))
+        if not act_detail_obj:
+            return HttpResponseRedirect('/volunteer/history/')
+        else:
+            # todo next
+            evaluation_obj = request.POST.get('evaluation_obj')
+            eval_value = request.POST.get("value")
+            # todo if evaluated then pass
+            for eval in evaluation_obj:
+                obj = EvaluationRule.objects.filter(id=eval)
+                if not obj:
+                    return HttpResponseRedirect('/volunteer/history/')
+                ae = ActivityEvaluation()
+                ae.activity = act_detail_obj
+                # todo save new ae
+
+
+
+    else:
+        return HttpResponseRedirect('/volunteer/history/')
 
 
 @csrf_protect

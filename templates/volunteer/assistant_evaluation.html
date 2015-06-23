@@ -1,0 +1,56 @@
+{% extends "volunteer/user_home_base.html" %}
+
+{% block center %}
+    <div id="content-main">
+        <h2> 活动自评</h2>
+        {% if message %}
+            <ul class="messagelist">
+                <li class="success">{{ message }}</li>
+            </ul>
+        {% endif %}
+        <div style="border: 1PX solid greenyellow">
+            <div>{{ activity.activity }}</div>
+            <div>{{ activity.activity_time }}</div>
+        </div>
+        <br/>
+
+        <form method="post" id="assistant_evaluation_form" action="">
+                {% csrf_token %}
+                {% for rule in evaluation_rules %}
+                    <fieldset class="module aligned wide">
+                    <tr>
+                        <th><label for="id_evaluation">评价项目:{{ rule.item }}</label></th>
+                    <tr>
+                        <th><label for="id_value">评价:</label></th>
+                        <td>
+                            <select id="id_value" name="value">
+                                <option value="" selected="selected">---------</option>
+                                <option value="0">非常同意</option>
+                                <option value="1">同意</option>
+                                <option value="2">一般</option>
+                                <option value="3">不同意</option>
+                                <option value="4">非常不同意</option>
+                            </select>
+                            <input id="id_evaluation_obj" name="evaluation_obj" type="hidden" value="{{ rule.id }}"/>
+                        </td>
+                    </tr>
+                    </fieldset>
+                    {% if form.errors %}
+                        <ol>
+                            {% for error in form.subject.errors %}
+                                <li><strong>{{ error|escape }}</strong></li>
+                            {% endfor %}
+                        </ol>
+                    {% endif %}
+                {% endfor %}
+            <!-- 活动关闭则无法再次评价 -->
+            {% if activity.status != 2 %}
+                <div class="submit-row">
+                    <input type="submit" value="提交" />
+                    <input type="hidden" name="activity_detail_id" value="{{ activity.id }}"/>
+                </div>
+            {% endif %}
+        </form>
+    </div>
+
+{% endblock %}
