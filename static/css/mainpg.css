@@ -181,9 +181,17 @@ a{
 	line-height: 30px;
 }
 
-#news_lst div ul li:hover{
-	background-color: #c3c0b0;	
+#news_lst div ul a{
+	color: #000;
+}
+
+#news_lst div ul a:hover{
 	color: #800;
+}
+
+#news_lst div ul span{
+	float: right;
+	color: #c3c0b0;
 }
 
 .news_lst{

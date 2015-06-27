@@ -4,12 +4,68 @@
 /* with innerpg.css */
 
 #news_lst{
-	float:left;
-	width:100%;
-	background-color:;
+	margin: 0 auto;
+	width:80%;
+	opacity: 0.9;
 }
 
 .news_sum{
-	width:100%;
 	background-color:#fff;
+}
+
+.news_sum:nth-child(2n){
+	background-color: #f7f7f7;
+}
+
+.news_sum .title{
+	display: inline;
+	font-size: 20px;
+	height: 42px;
+	line-height: 42px;
+	color: #000;
+}
+
+.news_sum .title:hover{
+	border-bottom: 1px #000 solid;
+}
+
+.news_sum .author{
+	display: inline;
+	margin-left: 10px;
+	color: #999;
+}
+
+.news_sum .time{
+	float: right;
+	color: #999;
+	padding-right: 10px;
+	padding-top: 10px;
+}
+
+.pageList{
+	list-style-type: none;
+	width: 50%;
+	margin: 0 auto;
+}
+
+.pageList li{
+	float: left;
+	height: 20px;
+	font-size: 16px;
+	line-height: 20px;
+	padding: 4px;
+	border-radius: 3px;
+	color: #8a5;
+	margin-right: 20px;
+}
+
+.pageList li:hover{
+	color: #fff;
+	background-color: #999;
+	cursor: pointer;
+}
+
+.pageList .active{
+	color: #fff;
+	background-color: #999;
 }
