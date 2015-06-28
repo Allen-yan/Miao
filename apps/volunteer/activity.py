@@ -63,7 +63,7 @@ def application(request, choice, user_id, activity_id):
             vol.status = '31'
             selected_activity.save()
 
-    return HttpResponseRedirect("/activity/list/?message=%s" % message)
+    return HttpResponseRedirect("/activities/?message=%s" % message)
 
 
 @csrf_protect
@@ -93,4 +93,4 @@ def cancel_application(request, choice, user_id, activity_id):
                     message = "第二志愿撤销成功"
             selected_activity.save()
 
-    return HttpResponseRedirect("/activity/list/?message=%s" % message)
+    return HttpResponseRedirect("/activities/?message=%s" % message)

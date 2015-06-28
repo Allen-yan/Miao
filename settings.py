@@ -115,4 +115,4 @@ TEMPLATE_DIRS = (
 
 LOGIN_URL = "/account/login/"
 
-APPEND_SLASH=False
+APPEND_SLASH = True
