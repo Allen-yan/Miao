@@ -1,125 +1,93 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <base href="<%=basePath %>" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link href="/static/css/mainpg.css" rel="stylesheet" type="text/css" />
-    <link href="/static/css/innerpg.css" rel="stylesheet" type="text/css" />
+{% extends "volunteer/base.html" %}
+{% block title %}苗苗阅读-HOME{% endblock %}
+
+{% block link %}
+    <link href="/static/css/mainpg.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" type="text/css" href="/static/css/owl.carousel.css">
     <link rel="stylesheet" type="text/css" href="/static/css/owl.theme.css">
-    <title>{% block title %}苗苗阅读-HOME{% endblock %}</title>
-    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"></script>
-    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
     <!-- <script type="text/javascript" src="js/slider.js"></script> -->
     <script type="text/javascript" src="/static/js/owl.carousel.min.js"></script>
     <script type="text/javascript" src="/static/js/mainpg.js"></script>
-    {% block link %}{% endblock %} 
-</head>
+{% endblock %}
+
 
 {% block body %}
-<div id="innerbd">
-<div id="wrapper">
-	<div id="head_bar">
-		<h1><a href="../" ><img id="logo" alt="苗苗阅读" src="/static/imgs/logo.jpeg" /></a></h1>
+<table id="guide" onmouseleave="outerGuide()">
+    <tr>
+        <td class="big_btn"><a id="about_btn" onmouseover="innerGuide(this)">关于苗苗阅读</a></td>
+    </tr>
+    <tr>
+        <td class="big_btn"><a id="join_btn" onmouseover="innerGuide(this)">加入我们</a></td>
+    </tr>
+</table>
 
-        <div id="user-tools">
-            <strong>
-                 {{ user.username }}
-            </strong>
-            {% if user.is_authenticated %}
-            <a href="/account/password_change/">修改密码</a>
-            <a href="/account/logout/">退出</a>
-            <a href="/volunteer/home/{{ user.id }}/">用户详情</a>
-            {% else %}
-            <a href="/account/register/">注册</a>
-            <a href="/account/login/">登录</a>
-            {% endif %}
-        </div>
+<!-- <div id="news_win" class="home-slider">
+    <a><img id="news_item 1" class="show" src="/static/css/b1.jpg" alt="news 1" /></a><br />
+    <a><img id="news_item 2" class="hide" src="/static/css/b1.jpg" alt="news 2" /></a><br />
+    <a><img id="news_item 3" class="hide" src="imgs/slides/03.jpg" alt="news 3" /></a><br />
+    <div id="slider">
+        <ul>
+            <li><input type="button" value="1" id="news 1" class="highlight" onmouseover="slide(this)" /></li>
+            <li><input type="button" value="2" id="news 2" class="waiting" onmouseover="slide(this)" /></li>
+            <li><input type="button" value="3" id="news 3" class="waiting" onmouseover="slide(this)" /></li>
+        </ul>
     </div>
-    
-	<table id="guide" onmouseleave="outerGuide()">
-		<tr><td class="big_btn"><a id="about_btn" onmouseover="innerGuide(this)">关于苗苗阅读</a></td></tr>
-		<tr><td class="big_btn"><a id="join_btn" onmouseover="innerGuide(this)">加入我们</a></td></tr>
-	</table>
-		
-	<!-- <div id="news_win" class="home-slider">
-		<a><img id="news_item 1" class="show" src="/static/css/b1.jpg" alt="news 1" /></a><br />
-		<a><img id="news_item 2" class="hide" src="/static/css/b1.jpg" alt="news 2" /></a><br />
-		<a><img id="news_item 3" class="hide" src="imgs/slides/03.jpg" alt="news 3" /></a><br />
-		<div id="slider">
-			<ul>
-				<li><input type="button" value="1" id="news 1" class="highlight" onmouseover="slide(this)" /></li>
-				<li><input type="button" value="2" id="news 2" class="waiting" onmouseover="slide(this)" /></li>
-				<li><input type="button" value="3" id="news 3" class="waiting" onmouseover="slide(this)" /></li>
-			</ul>
-		</div>
-	</div> -->
+</div> -->
 
-	<div id="news_win" class="owl-carousel owl-theme">
-		<div class="item"><img src="/static/imgs/s1.jpg"></div>
-		<div class="item"><img src="/static/imgs/s2.jpg"></div>
-		<div class="item"><img src="/static/imgs/s3.jpg"></div>
-	</div>
-		
-	<div id="news_lst" >
-		<div class="news_lst" id="actv_lst">
-			<h3>活动记录——导读课</h3><a class="more" href="news">更多 >></a>
-			<hr />
-			<ul>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-			</ul>
-		</div>
-		<div class="news_lst" id="trains_lst">
-			<h3>志愿者培训</h3><a class="more" href="train_classes">更多 >></a>
-			<hr />
-			<ul>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-			</ul>
-		</div>
-		<div class="news_lst" id="articles_lst">
-			<h3>读书经验谈</h3><a class="more" href="articles">更多 >></a>
-			<hr />
-			<ul>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-			</ul>
-		</div>
-		<div class="news_lst" id="vlnv_lst">
-			<h3>志愿者心声</h3><a class="more" href="feelings">更多 >></a>
-			<hr />
-			<ul>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-				<li><a href="#" class="title">title</a><span class="author">author</span></li>
-			</ul>
-		</div>
-	</div>
-		
-	<div class="clear"></div>
-		<div id="foot">
-			<p>Copyright &copy; 2015 苗苗阅读 - All Rights Reserved</p>
-		</div>
+<div id="news_win" class="owl-carousel owl-theme">
+    <div class="item"><img src="/static/imgs/s1.jpg"></div>
+    <div class="item"><img src="/static/imgs/s2.jpg"></div>
+    <div class="item"><img src="/static/imgs/s3.jpg"></div>
+</div>
+
+<div id="news_lst">
+    <div class="news_lst" id="actv_lst">
+        <h3>活动记录——导读课</h3><a class="more" href="/reading_classes/">更多 >></a>
+        <hr/>
+        <ul>
+            {% for a in reading_classes %}
+            <li>
+                <a href="/reading_class/{{ a.id }}/" class="title">{{ a.title }}</a>
+                <span class="author">{{ a.author }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="news_lst" id="trains_lst">
+        <h3>志愿者培训</h3><a class="more" href="/train_classes/">更多 >></a>
+        <hr/>
+        <ul>
+            {% for a in train_classes %}
+            <li>
+                <a href="/train_classes/{{ a.id }}/" class="title">{{ a.title }}</a>
+                <span class="author">{{ a.author }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="news_lst" id="articles_lst">
+        <h3>读书经验谈</h3><a class="more" href="/reading_show/">更多 >></a>
+        <hr/>
+        <ul>
+            {% for a in reading_show %}
+            <li>
+                <a href="/reading_show/{{ a.id }}/" class="title">{{ a.title }}</a>
+                <span class="author">{{ a.author }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="news_lst" id="vlnv_lst">
+        <h3>志愿者心声</h3><a class="more" href="/reading_show/">更多 >></a>
+        <hr/>
+        <ul>
+            {% for a in reading_show %}
+            <li>
+                <a href="/reading_show/{{ a.id }}/" class="title">{{ a.title }}</a>
+                <span class="author">{{ a.author }}</span>
+            </li>
+            {% endfor %}
+        </ul>
     </div>
 </div>
 {% endblock %}
