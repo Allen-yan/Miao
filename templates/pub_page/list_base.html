@@ -1,37 +1,41 @@
-{% extends "base.html" %}
+{% extends "volunteer/base.html" %}
 
-{% block title %}活动列表{% endblock %}
+{% block title %}{% endblock %}
 
-{% block link %}{% endblock %}
+{% block link %}
+    <link href="/static/css/lstspg.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
 
 {% block body %}
-
-    <h1>活动列表</h1>
-    <div >
-        {% for act in activities %}
-            <ul style="border:solid 1px red" >
-                <li>
-                    {{ act.activity_name }}
-                </li>
-                <li>
-                    {{ act.cource }}
-                </li>
-                <li>
-                    {{ act.assistant }}
-                </li>
-                <li>
-                    {{ act.address }}
-                </li>
-            </ul>
-            <div>
-                {% if volunteer_status == 1 %}
-                    {# 如果是志愿者则能进行申请 #}
-                    <a href="/activity/apply/first/{{ user.id }}/">第一志愿申请</a>
-                    <a href="/activity/apply/second/{{ user.id }}/">第二志愿申请</a>
+    {% block content_list %}{% endblock %}
+    {% block page_list %}
+        {#        <ul class="pageList">#}
+        {#            <li>首页</li>#}
+        {#            <li>上一页</li>#}
+        {#            <li class="active">1</li>#}
+        {#            <li>2</li>#}
+        {#            <li>3</li>#}
+        {#            <li>4</li>#}
+        {#            <li>5</li>#}
+        {#            <li>6</li>#}
+        {#            <li>下一页</li>#}
+        {#            <li>末页</li>#}
+        {#        </ul>#}
+        <div class="pageList">
+            <span class="step-links">
+                {% if data.has_previous %}
+                    <a href="?page={{ data.previous_page_number }}">上一页</a>
                 {% endif %}
-            </div>
-        {% endfor %}
-    </div>
 
+                <span class="current">
+                    当前页 {{ data.number }} of {{ data.paginator.num_pages }}.
+                </span>
+
+                {% if data.has_next %}
+                    <a href="?page={{ data.next_page_number }}">下一页</a>
+                {% endif %}
+            </span>
+        </div>
+    {% endblock %}
 
 {% endblock %}

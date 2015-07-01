@@ -116,3 +116,5 @@ TEMPLATE_DIRS = (
 LOGIN_URL = "/account/login/"
 
 APPEND_SLASH = True
+
+ARTICLE_LIST_COUNT = 5

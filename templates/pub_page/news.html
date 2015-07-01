@@ -1,92 +1,14 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <base href="<%=basePath %>" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link href="/static/css/innerpg.css" rel="stylesheet" type="text/css" />
-    <link href="/static/css/lstspg.css" rel="stylesheet" type="text/css" />
-    <title>{% block title %}苗苗阅读-导读课{% endblock %}</title>
-    <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"></script>
-    <script type="text/javascript" src="js/slider.js"></script>
-    <script type="text/javascript" src="/static/js/mainpg.js"></script>
-    {% block link %}{% endblock %}
-</head>
+{% extends 'pub_page/list_base.html' %}
 
-{% block body %}
-<div id="wrapper">
-	<div id="head_bar">
-		<h1><a href="../" ><img id="logo" alt="苗苗阅读" src="/static/imgs/logo.jpeg" /></a></h1>
-		
-		<div id="user-tools">
-            <strong>
-                 {{ user.username }}
-            </strong>
-            {% if user.is_authenticated %}
-            <a href="/account/password_change/">修改密码</a>
-            <a href="/account/logout/">退出</a>
-            <a href="/volunteer/home/{{ user.id }}/">用户详情</a><b> | </b>
-            <a href="../">返回首页</a>
-            {% else %}
-            <a href="/account/register/">注册</a>
-            <a href="/account/login/">登录</a><b> | </b>
-            <a href="../">返回首页</a>
-            {% endif %}
-        </div>
-	</div>
-		
-	<div id="news_lst">
-		<div class="news_sum">
-			<a href="article_detail" class="title">天气好热热热！！</a>
-                                <span class="author">xixidada</span>
-                                <span class="time">2015.6.26</span>
-		</div>
-		<div class="news_sum">
-			<a href="#" class="title">天气好热热热！！</a>
-                                <span class="author">xixidada</span>
-                                <span class="time">2015.6.26</span>
-		</div>
-                    <div class="news_sum">
-                                <a href="#" class="title">天气好热热热！！</a>
-                                <span class="author">xixidada</span>
-                                <span class="time">2015.6.26</span>
-                    </div>
-                    <div class="news_sum">
-                                <a href="#" class="title">天气好热热热！！</a>
-                                <span class="author">xixidada</span>
-                                <span class="time">2015.6.26</span>
-                    </div>
-                    <div class="news_sum">
-                                <a href="#" class="title">天气好热热热！！</a>
-                                <span class="author">xixidada</span>
-                                <span class="time">2015.6.26</span>
-                    </div>
-                    <div class="news_sum">
-                                <a href="#" class="title">天气好热热热！！</a>
-                                <span class="author">xixidada</span>
-                                <span class="time">2015.6.26</span>
-                    </div>
-                    <div class="news_sum">
-                                <a href="#" class="title">天气好热热热！！</a>
-                                <span class="author">xixidada</span>
-                                <span class="time">2015.6.26</span>
-                    </div>
-	</div>
-          <ul class="pageList">
-                     <li>首页</li>
-                     <li>上一页</li>
-                     <li class="active">1</li>
-                     <li>2</li>
-                     <li>3</li>
-                     <li>4</li>
-                     <li>5</li>
-                     <li>6</li>
-                     <li>下一页</li>
-                     <li>末页</li>
-          </ul>
-		
-	<div class="clear"></div>
-		<div id="foot">
-			<p>Copyright &copy; 2015 苗苗阅读 - All Rights Reserved</p>
-		</div>
+{% block content_list %}
+
+    <div id="news_lst">
+        {% for news in data %}
+            <div class="news_sum">
+                <a href="/news/{{ news.id }}/" class="title">{{ news.title }}！！</a>
+                <span class="author">{{ news.author }}</span>
+                <span class="time">{{ news.publish_time }}</span>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}

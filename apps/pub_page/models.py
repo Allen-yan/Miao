@@ -9,6 +9,7 @@ ARTICLE_CHOICE = (
     ('2', "读书经验谈"),
     ('3', "志愿者心声"),
     ('4', "志愿者培训"),
+    ('5', "新闻"),
 )
 
 class Article(models.Model):
